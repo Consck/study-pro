@@ -20,12 +20,18 @@
 <!--            <artifactId>spring-boot-parent</artifactId>-->
 <!--            <version>1.5.16.RELEASE</version>-->
 <!--        </dependency>-->
-        <!-- 引入web依赖-->
+        <!-- 引入web依赖，spring boot集成MVC框架并实现自动配置-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.1.5.RELEASE</version>
         </dependency>
+        <!-- 若MVC使用beetl作为模板技术，则引入此依赖-->
+<!--        <dependency>-->
+<!--            <groupId>com.ibeetl</groupId>-->
+<!--            <artifactId>beetl-framework-starter</artifactId>-->
+<!--            <version>1.2.40.Beetl.RELEASE</version>-->
+<!--        </dependency>-->
         <!-- 引入-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
