@@ -1,11 +1,17 @@
 package sample.controller;
 
+import com.fasterxml.jackson.core.json.async.NonBlockingJsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import sample.application.HelloWordManager;
+
+import java.sql.Date;
 
 /**
  * @author bianjinyue
@@ -13,9 +19,29 @@ import sample.application.HelloWordManager;
  * @date 2022-06-22 10:48
  */
 @Controller
+@RequestMapping("/{id}")
 public class HelloWorldController {
     @Autowired
     private HelloWordManager helloWordManager;
+
+    /**
+     * 此方法会首先被调用，并将方法结果作为model的属性
+     * 再执行具体的Controller方法
+     * @param id
+     */
+    @ModelAttribute
+    public void proReq(@PathVariable long id,ModelAndView model){
+        System.out.println("先调用此方法");
+/*        model.addAttribute("id", id);
+        ModelAndView model = new ModelAndView();*/
+        model.addObject("id", id);
+    }
+
+    @RequestMapping("/c")
+    @ResponseBody
+    public ModelMap contains(ModelAndView model){
+        return model.getModelMap();
+    }
 
     /**
      * ResponseBody 注解：直接返回内容而不是视图名，将返回的对象输出到客户端。如果不是字符串，默认使用Jackson序列化成JSON字符串后输出
@@ -23,9 +49,9 @@ public class HelloWorldController {
      * @param name
      * @return
      */
-    @RequestMapping("/{name}")
-    public @ResponseBody String helloWorld(@RequestParam String name){
-        return "hello," + name;
+    @RequestMapping(path="/{name}")
+    public @ResponseBody String helloWorld(@PathVariable String name, @PathVariable("id")long testId,@RequestBody Object obj){
+        return "hello," + name + ",id=" + testId + ",obj=" + obj;
     }
 
 
@@ -33,4 +59,20 @@ public class HelloWorldController {
     public @ResponseBody String helloWorld2(){
         return "hello," + helloWordManager.helloWord();
     }
+
+    /**
+     * 声明一个方法来自己扩展绑定的特性
+     * @param binder
+     */
+    @InitBinder
+    protected void initBinder(WebDataBinder binder){
+        binder.addCustomFormatter(new DateFormatter("yyyy-MM-dd"));
+    }
+
+    @RequestMapping("/date")
+    @ResponseBody
+    public void printDate(Date d){
+        System.out.println(d);
+    }
+
 }
