@@ -6,12 +6,18 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import sample.application.HelloWordManager;
+import sample.domain.WorkInfoFormEntity;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * @author bianjinyue
@@ -75,4 +81,14 @@ public class HelloWorldController {
         System.out.println(d);
     }
 
+
+    @RequestMapping("/v")
+    @ResponseBody
+    public void addWorkInfo(@Validated({WorkInfoFormEntity.Add.class}) WorkInfoFormEntity entity, BindingResult result){
+        if(result.hasErrors()){
+            List<ObjectError> list = result.getAllErrors();
+            FieldError error = (FieldError) list.get(0);
+            System.out.println(error.getObjectName()+","+error.getField()+","+error.getDefaultMessage());
+        }
+    }
 }
