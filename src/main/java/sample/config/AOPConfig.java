@@ -21,7 +21,7 @@ public class AOPConfig {
      * @return
      * @throws Throwable
      */
-    @Around("@within(org.springframework.stereotype.Controller)")
+//    @Around("@within(org.springframework.stereotype.Controller)")
     public Object simpleAop(final ProceedingJoinPoint point) throws Throwable {
         Object[] args = point.getArgs();
         /**
@@ -43,7 +43,7 @@ public class AOPConfig {
      * @return
      * @throws Throwable
      */
-    @Before("@within(org.springframework.stereotype.Service)")
+//    @Before("@within(org.springframework.stereotype.Service)")
     public void simpleAdviceBefore() throws Throwable {
 
         /**
@@ -52,7 +52,7 @@ public class AOPConfig {
         System.out.println("Service执行方法前");
     }
 
-    @After("@within(org.springframework.stereotype.Service)")
+//    @After("@within(org.springframework.stereotype.Service)")
     public void simpleAdviceAfter() throws Throwable {
 
         /**

@@ -1,7 +1,10 @@
 package sample.controller;
 
 import com.fasterxml.jackson.core.json.async.NonBlockingJsonParser;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import sample.application.HelloWordManager;
+import sample.config.MqttConfig;
 import sample.domain.WorkInfoFormEntity;
 
 import java.sql.Date;
@@ -29,6 +33,8 @@ import java.util.List;
 public class HelloWorldController {
     @Autowired
     private HelloWordManager helloWordManager;
+    @Autowired
+    private MqttClient mqttClient;
 
     /**
      * 此方法会首先被调用，并将方法结果作为model的属性
@@ -90,5 +96,11 @@ public class HelloWorldController {
             FieldError error = (FieldError) list.get(0);
             System.out.println(error.getObjectName()+","+error.getField()+","+error.getDefaultMessage());
         }
+    }
+
+    @RequestMapping("/send")
+    public void sendMsg() throws MqttException {
+        String publish = "test rmqx send message";
+        mqttClient.publish("/device/123", publish.getBytes(), 1, false);
     }
 }
